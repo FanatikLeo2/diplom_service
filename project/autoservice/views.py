@@ -29,28 +29,39 @@ from .serializers import (
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from django.http import HttpResponse
+from django.db.models import Q
 
 
 class MachinesViewSet(mixins.ListModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+                      mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     queryset = Machine.objects.all()
     serializer_class = MachineSerializer
     permission_classes = [permissions.IsAuthenticated]
+
     def list(self, request, *args, **kwargs):
         try:
-            machines = self.get_queryset() #.filter(client__exact=request.user)
+            if request.user.groups.filter(name='Managers').exists():
+                machines = self.get_queryset()
+            else:
+                machines = self.get_queryset().filter(
+                    Q(client=request.user) | Q(service_company__user=request.user)
+                )
             serializer = self.get_serializer(machines, many=True)
             return Response(serializer.data)
-        except :
-            return HttpResponse('Unauthorized', status=401)
+        except Exception as e:
+            print(str(e))
+            return Response({'detail': 'Unauthorized'}, status=401)
 
 
 class MaintenancesViewSet(mixins.ListModelMixin,
-                         mixins.UpdateModelMixin,
-                         mixins.RetrieveModelMixin,
-                         viewsets.GenericViewSet):
+                          mixins.CreateModelMixin,
+                          mixins.UpdateModelMixin,
+                          mixins.RetrieveModelMixin,
+                          mixins.DestroyModelMixin,
+                          viewsets.GenericViewSet):
     object = Maintenance
     queryset = Maintenance.objects.all()
     serializer_class = MaintenanceSerializer
@@ -58,7 +69,13 @@ class MaintenancesViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         try:
-            machines = Machine.objects.all() # request.user.machine_user.all()
+            if request.user.groups.filter(name='Managers').exists():
+                machines = Machine.objects.all()
+            else:
+                machines = Machine.objects.filter(
+                    Q(client=request.user) |
+                    Q(service_company__user=request.user)
+                )
             maintenances = Maintenance.objects.filter(machine__in=machines)
             serializer = self.get_serializer(maintenances, many=True)
             return Response(serializer.data)
@@ -67,9 +84,9 @@ class MaintenancesViewSet(mixins.ListModelMixin,
 
 
 class ComplaintsViewSet(mixins.ListModelMixin,
-                       mixins.UpdateModelMixin,
-                       mixins.RetrieveModelMixin,
-                       viewsets.GenericViewSet):
+                        mixins.UpdateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        viewsets.GenericViewSet):
     object = Complaint
     queryset = Complaint.objects.all()
     serializer_class = ComplaintSerializer
@@ -77,7 +94,13 @@ class ComplaintsViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         try:
-            machines = Machine.objects.all() # request.user.machine_user.all()
+            if request.user.groups.filter(name='Managers').exists():
+                machines = Machine.objects.all()
+            else:
+                machines = Machine.objects.filter(
+                    Q(client=request.user) |
+                    Q(service_company__user=request.user)
+                )
             complaints = Complaint.objects.filter(machine__in=machines)
             serializer = self.get_serializer(complaints, many=True)
             return Response(serializer.data)
@@ -93,8 +116,28 @@ class UserViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         user = request.user
+        print(f'User: {user}')
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+    def list_all(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     user_service_companies = ServiceCompany.objects.filter(user=user)
+    #     user_data = self.get_serializer(user).data
+    #     print(user_data)
+    #     if user_service_companies.exists():
+    #         service_company_data = ServiceCompanySerializer(user_service_companies.first()).data
+    #         return Response({
+    #             'user': user_data,
+    #             'service_company': service_company_data
+    #         })
+    #     else:
+    #         return Response(user_data)
 
 
 class MachineModelViewSet(mixins.ListModelMixin,
@@ -158,9 +201,3 @@ class ServiceCompanyViewSet(mixins.ListModelMixin,
                             viewsets.GenericViewSet):
     queryset = ServiceCompany.objects.all()
     serializer_class = ServiceCompanySerializer
-
-
-
-
-
-

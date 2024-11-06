@@ -1,0 +1,10 @@
+:root {
+    --first: #163E6C;
+    --second: #D20A11;
+    --third: #EBE6D6;
+}
+
+@font-face {
+    font-family: 'astra-sans';
+    src: url('fonts/PtAstraSans/PT-Astra-Sans_Regular.ttf');
+}

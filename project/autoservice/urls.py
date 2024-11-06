@@ -31,5 +31,6 @@ router.register(r'maintenance_type', MaintenanceTypeViewSet)
 router.register(r'service_company', ServiceCompanyViewSet)
 
 urlpatterns = [
-    path('autoservice/', include(router.urls))
+    path('autoservice/', include(router.urls)),
+    path('autoservice/user/all/', UserViewSet.as_view({'get': 'list_all'}), name='user-list-all'),
 ]
