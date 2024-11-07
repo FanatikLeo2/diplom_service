@@ -222,18 +222,52 @@ class RecoveryMethodSerializer(serializers.ModelSerializer):
 
 
 class ComplaintSerializer(serializers.ModelSerializer):
-    refusal_date = serializers.DateField()
-    failure_node = FailureNodeSerializer()
-    recovery_method = RecoveryMethodSerializer()
-    recovery_date = serializers.DateField()
-    machine = MachineSerializer()
-    service_company = ServiceCompanySerializer()
-
+    failure_node = serializers.PrimaryKeyRelatedField(queryset=FailureNode.objects.all())
+    failure_node_details = serializers.SerializerMethodField()
+    recovery_method = serializers.PrimaryKeyRelatedField(queryset=RecoveryMethod.objects.all())
+    recovery_method_details = serializers.SerializerMethodField()
+    service_company = serializers.PrimaryKeyRelatedField(queryset=ServiceCompany.objects.all())
+    service_company_details = serializers.SerializerMethodField()
+    machine = serializers.PrimaryKeyRelatedField(queryset=Machine.objects.all())
+    machine_details = serializers.SerializerMethodField()
     class Meta:
         model = Complaint
         fields = ['id', 'refusal_date', 'operating_time', 'failure_node',
+                  'failure_node_details',
                   'failure_description', 'recovery_method',
+                  'recovery_method_details',
                   'spare_parts_used', 'recovery_date',
-                  'equipment_downtime', 'machine', 'service_company']
+                  'equipment_downtime', 'machine', 'machine_details',
+                  'service_company',
+                  'service_company_details']
 
+    def get_machine_details(self, obj):
+        machine = obj.machine
+        return MachineSerializer(machine).data if machine else None
 
+    def get_failure_node_details(self, obj):
+        failure_node = obj.failure_node
+        return FailureNodeSerializer(failure_node).data if failure_node else None
+
+    def get_recovery_method_details(self, obj):
+        recovery_method = obj.recovery_method
+        return RecoveryMethodSerializer(recovery_method).data if recovery_method else None
+
+    def get_service_company_details(self, obj):
+        service_company = obj.service_company
+        return ServiceCompanySerializer(service_company).data if service_company else None
+
+    def create(self, validated_data):
+        mahine_details = validated_data.pop('mahine')
+        failure_node_details = validated_data.pop('failure_node')
+        recovery_method_details = validated_data.pop('recovery_method')
+        service_company_data = validated_data.pop('service_company')
+
+        complaint = Maintenance.objects.create(
+            machine = mahine_details,
+            failure_node=failure_node_details,
+            recovery_method=recovery_method_details,
+            service_company=service_company_data,
+            **validated_data
+        )
+        return complaint

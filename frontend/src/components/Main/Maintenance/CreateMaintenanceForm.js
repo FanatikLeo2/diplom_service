@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Select from 'react-select'
 import { fetchMaintenanceCreate } from "../../../reducers/maintenanceReducer/fetchMaintenances";
+import './CreateMaintenanceForm.css'
 
 export const CreateMaintenanceForm = ({onFormSubmit}) => {
     const reduxState = useSelector(state => state.otherModels);
@@ -36,12 +37,12 @@ export const CreateMaintenanceForm = ({onFormSubmit}) => {
             !orderDate ||
             !selectedServiceCompanyModelDetails 
         ) {
-            setError('Пожалуйста, заполните все поля.');
+            setError('Пожалуйста, заполните все поля!');
             return;
         }
 
         if (isNaN(operatingTime) || operatingTime.trim() === '') {
-            setOperatingTimeError('Пожалуйста, введите корректное значение для Operating Time.');
+            setOperatingTimeError('Введите корректное значение наработки!');
             return;
         }
 
@@ -59,8 +60,8 @@ export const CreateMaintenanceForm = ({onFormSubmit}) => {
 
     return (
         
-        <div className="createForm-main-cont">
-                <div>
+            <div className="createForm-main-cont">
+                <div className="machine-create-table-block"> 
                     <Select 
                         options={machine_details}
                         value={selectedMachineDetails}
@@ -68,6 +69,8 @@ export const CreateMaintenanceForm = ({onFormSubmit}) => {
                         placeholder="Выберите машину"
                         required
                     />
+                </div>
+                <div className="machine-create-table-block"> 
                     <Select 
                         options={maintenance_type_details}
                         value={selectedMaintenanceTypeDetails}
@@ -75,35 +78,44 @@ export const CreateMaintenanceForm = ({onFormSubmit}) => {
                         placeholder="Выберите тип ТО"
                         required
                     />
-                    <label>Дата проведения ТО:</label>
+                </div>
+                <div className="machine-create-table-block">
+                    <span>Дата проведения ТО:</span>
                     <input
-                        className="signin-input"
+                        className="create-input"
                         type="date"
                         value={eventDate}
                         onChange={(e) => {setEventDate(e.target.value)}}
                     />
+                </div>
+                <div className="machine-create-table-block">
                     <input
-                        className="signin-input"
+                        className="create-input"
                         type="text"
                         placeholder="operatingTime"
                         value={operatingTime}
                         onChange={(e) => {setOperatingTime(e.target.value)}}
                     />
-                    {operatingTimeError && <div className="error-message" style={{color: 'red'}}>{operatingTimeError}</div>}
+                </div>
+                <div className="machine-create-table-block">
                     <input
-                        className="signin-input"
+                        className="create-input"
                         type="text"
                         placeholder="orderId"
                         value={orderId}
                         onChange={(e) => {setOrderId(e.target.value)}}
                     />
+                </div>
+                <div className="machine-create-table-block">
                     <label>Дата заказ-наряда:</label>
                     <input
-                        className="signin-input"
+                        className="create-input"
                         type="date"
                         value={orderDate}
                         onChange={(e) => {setOrderDate(e.target.value)}}
                     />
+                </div>
+                <div className="machine-create-table-block">
                     <Select 
                         options={service_company_details}
                         value={selectedServiceCompanyModelDetails}
@@ -111,12 +123,12 @@ export const CreateMaintenanceForm = ({onFormSubmit}) => {
                         placeholder="Выберите сервисную компанию"
                         required
                     />
-
+                </div>
+                <div className="machine-create-table-block">
+                    {operatingTimeError && <div className="error-message" style={{color: 'red'}}>{operatingTimeError}</div>}
                     {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
-
                     <button onClick={handleSubmit} className="signin-input">Сохранить</button>
                 </div>
-                <hr />
-        </div>
+            </div>
     )    
 }

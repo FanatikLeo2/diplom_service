@@ -1,0 +1,21 @@
+.createForm-main-cont{
+    margin: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 5px;
+}
+
+.machine-create-table-block{
+    margin: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-input{
+    width: 250px;
+    height: 100%;
+    text-align: center;
+}

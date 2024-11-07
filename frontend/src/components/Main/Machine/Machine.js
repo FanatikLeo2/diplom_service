@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMachineIdRetrieve } from '../../../reducers/idRetrieveReducer/fetchIdRetrieve';
+import { fetchMachineIdRetrieve,
+    fetchMachineModelIdRetrieve,
+    fetchTransmissionModelIdRetrieve,
+    fetchEngineModelIdRetrieve,
+    fetchSteeringAxleModelIdRetrieve,
+    fetchDrivingAxleModelIdRetrieve,
+ } from '../../../reducers/idRetrieveReducer/fetchIdRetrieve';
 import { CreateMachineForm } from "./CreateMachineForm";
+import './Machine.css'
  
 export const Machine = function() {
     const reduxState = useSelector(state => state.machine); // Состояние машин
@@ -14,8 +21,8 @@ export const Machine = function() {
         model: '', // Фильтр по модели машины
         engine: '', // Фильтр по двигателю
         transmission: '', // Фильтр по трансмиссии
-        shipmentDateFrom: '', // Фильтр по дате отгрузки "от"
-        shipmentDateTo: '' // Фильтр по дате отгрузки "до"
+        steering_axle: '', // Фильтр по управляемому мосту
+        driving_axle: '' // Фильтр по ведущему мосту
     });
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -36,13 +43,13 @@ export const Machine = function() {
         if (filters.transmission) {
             filteredData = filteredData.filter(item => item.transmission_model_details.name.toLowerCase().includes(filters.transmission.toLowerCase()));
         }
-        // Фильтрация по дате отгрузки "от"
-        if (filters.shipmentDateFrom) {
-            filteredData = filteredData.filter(item => new Date(item.date_of_shipment) >= new Date(filters.shipmentDateFrom));
+        // Фильтрация по управляемому мосту
+        if (filters.steering_axle) {
+            filteredData = filteredData.filter(item => item.steering_axle_model_details.name.toLowerCase().includes(filters.steering_axle.toLowerCase()));
         }
-        // Фильтрация по дате отгрузки "до"
-        if (filters.shipmentDateTo) {
-            filteredData = filteredData.filter(item => new Date(item.date_of_shipment) <= new Date(filters.shipmentDateTo));
+        // Фильтрация по ведущему мосту
+        if (filters.driving_axle) {
+            filteredData = filteredData.filter(item => item.driving_axle_model_details.name.toLowerCase().includes(filters.driving_axle.toLowerCase()));
         }
 
         return filteredData; // Возвращаем отфильтрованные данные
@@ -55,21 +62,16 @@ export const Machine = function() {
             case 'shipment':
                 sortedData = sortedData.sort((a, b) => new Date(a.date_of_shipment) - new Date(b.date_of_shipment)); // Сортировка по дате отгрузки
                 break;
+            case 'machine_num':
+                sortedData = sortedData.sort((a, b) => a.machine_factory_num.localeCompare(b.machine_factory_num)); // Сортировка по номеру машины
+                break;    
             case 'model':
                 sortedData = sortedData.sort((a, b) => a.machine_model_details.name.localeCompare(b.machine_model_details.name)); // Сортировка по модели
                 break;
             case 'engine':
                 sortedData = sortedData.sort((a, b) => a.engine_model_details.name.localeCompare(b.engine_model_details.name)); // Сортировка по двигателю
                 break;
-            case 'transmission':
-                sortedData = sortedData.sort((a, b) => a.transmission_model_details.name.localeCompare(b.transmission_model_details.name)); // Сортировка по трансмиссии
-                break;
-            case 'lead':
-                sortedData = sortedData.sort((a, b) => a.steering_axle_model_details.name.localeCompare(b.steering_axle_model_details.name)); // Сортировка по ведущему мосту
-                break;
-            case 'control':
-                sortedData = sortedData.sort((a, b) => a.driving_axle_model_details.name.localeCompare(b.driving_axle_model_details.name)); // Сортировка по управляемому мосту
-                break;
+
         }
         setState(sortedData); // Обновляем состояние с отсортированными данными
     };
@@ -78,6 +80,31 @@ export const Machine = function() {
         dispatch(fetchMachineIdRetrieve(id)); // Получаем данные по выбранной машине
         navigate('/autoservice/machine'); // Перенаправляем на страницу машины
     };
+
+    const handleClickMachineModels = (id) => {
+        dispatch(fetchMachineModelIdRetrieve(id));
+        navigate('/autoservice/machine_model');
+    }
+
+    const handleClickEngineModels = (id) => {
+        dispatch(fetchEngineModelIdRetrieve(id));
+        navigate('/autoservice/engine_model');
+    }
+
+    const handleClickTransmissionModels = (id) => {
+        dispatch(fetchTransmissionModelIdRetrieve(id));
+        navigate('/autoservice/transmission_model');
+    }
+
+    const handleClickSteeringAxleModels = (id) => {
+        dispatch(fetchSteeringAxleModelIdRetrieve(id));
+        navigate('/autoservice/steering_axle_model');
+    }
+
+    const handleClickDrivingAxleModels = (id) => {
+        dispatch(fetchDrivingAxleModelIdRetrieve(id));
+        navigate('/autoservice/driving_axle_model');
+    }    
 
     const handleFormSubmit = () => {
         setCreateForm(false); // Закрываем форму
@@ -105,13 +132,13 @@ export const Machine = function() {
     return (
         <div>
             {/* Выпадающий список для сортировки */}
+            <span>Сортировка:  </span>
             <select value={sortPattern} onChange={(e) => setSortPattern(e.target.value)}>
                 <option value='shipment'>по дате</option>
+                <option value='machine_num'>по заводскому номеру</option>
+                <option value='engine'>по двигателю</option>
                 <option value='model'>по модели</option>
                 <option value='engine'>по двигателю</option>
-                <option value='transmission'>по трансмиссии</option>
-                <option value='lead'>по вед.мосту</option>
-                <option value='control'>по упр.мосту</option>
             </select>
 
             {/* Форма для фильтров */}
@@ -122,6 +149,7 @@ export const Machine = function() {
                     value={filters.model}
                     placeholder="Фильтр по модели"
                     onChange={handleFilterChange}
+                    className="input-filter"
                 />
                 <input
                     type="text"
@@ -129,6 +157,7 @@ export const Machine = function() {
                     value={filters.engine}
                     placeholder="Фильтр по двигателю"
                     onChange={handleFilterChange}
+                    className="input-filter"
                 />
                 <input
                     type="text"
@@ -136,20 +165,23 @@ export const Machine = function() {
                     value={filters.transmission}
                     placeholder="Фильтр по трансмиссии"
                     onChange={handleFilterChange}
+                    className="input-filter"
                 />
                 <input
-                    type="date"
-                    name="shipmentDateFrom"
-                    value={filters.shipmentDateFrom}
+                    type="text"
+                    name="steering_axle"
+                    value={filters.steering_axle}
                     onChange={handleFilterChange}
-                    placeholder="Дата от"
+                    placeholder="Фильтр по управляемому мосту"
+                    className="input-filter"
                 />
                 <input
-                    type="date"
-                    name="shipmentDateTo"
-                    value={filters.shipmentDateTo}
+                    type="text"
+                    name="driving_axle"
+                    value={filters.driving_axle}
                     onChange={handleFilterChange}
-                    placeholder="Дата до"
+                    placeholder="Фильтр по ведущему мосту"
+                    className="input-filter"
                 />
             </div>
 
@@ -167,14 +199,31 @@ export const Machine = function() {
             {/* Отображение списка машин */}
             {state.map(item => (
                 <div key={item.id} className="item">
-                    <h2 onClick={() => handleClick(item.id)} style={{ cursor: 'pointer' }}>Машина №: {item.id} - {item.machine_factory_num}</h2>
-                    <p>Модель: {item.machine_model_details.name}</p>
-                    <p>Двигатель: {item.engine_model_details.name}</p>
-                    <p>Трансмиссия: {item.transmission_model_details.name}</p>
-                    <p>Управляемый мост: {item.steering_axle_model_details.name}</p>
-                    <p>Ведущий мост: {item.driving_axle_model_details.name}</p>
-                    <p>Дата отгрузки: {item.date_of_shipment}</p>
-                    <hr />
+                    <div className="machine-table-block" 
+                        onClick={() => handleClick(item.id)}>
+                        <h2>Машина №: {item.id}</h2>
+                    </div>
+                    <div className="machine-table-block">
+                        Зав. № машины: {item.machine_factory_num}
+                    </div>
+                    <div className="machine-table-block" onClick={() => handleClickMachineModels(item.machine_model_details.id)}>
+                        Модель: {item.machine_model_details.name}
+                    </div>
+                    <div className="machine-table-block" onClick={() => handleClickEngineModels(item.engine_model_details.id)}>
+                        Двигатель: {item.engine_model_details.name}
+                    </div>
+                    <div className="machine-table-block" onClick={() => handleClickTransmissionModels(item.transmission_model_details.id)}>
+                        Трансмиссия: {item.transmission_model_details.name}
+                    </div>
+                    <div className="machine-table-block" onClick={() => handleClickSteeringAxleModels(item.steering_axle_model_details.id)}>
+                        Управляемый мост: {item.steering_axle_model_details.name}
+                    </div>
+                    <div className="machine-table-block" onClick={() => handleClickDrivingAxleModels(item.driving_axle_model_details.id)}>
+                        Ведущий мост: {item.driving_axle_model_details.name}
+                    </div>
+                    <div className="machine-table-block">
+                        Дата отгрузки: {item.date_of_shipment}
+                    </div>
                 </div>
             ))}
         </div>

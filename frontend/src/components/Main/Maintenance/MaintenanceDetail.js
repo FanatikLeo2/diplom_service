@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { patchMaintenance} from "../../../reducers/patchRequest/patchMaintenance";
 import { fetchMaintenanceIdRetrieve } from "../../../reducers/idRetrieveReducer/fetchIdRetrieve";
 import Select from 'react-select'
+import './MaintenanceDetail.css'
 
 export const MaintenanceDetail = () => {
     const reduxStateModels = useSelector(state => state.otherModels);
@@ -40,7 +41,7 @@ export const MaintenanceDetail = () => {
             setError('');
             setOperatingTimeError('');
 
-            if (isNaN(operatingTime) || operatingTime.trim() === '') {
+            if (operatingTime.trim() !== '' && isNaN(operatingTime)) {
                 setOperatingTimeError('Пожалуйста, введите корректное значение для Operating Time.');
                 return;
             }
@@ -92,7 +93,7 @@ export const MaintenanceDetail = () => {
                     <span>Дата проведения ТО</span>
                     <span>{reduxState.event_date}</span>
                     <input
-                        className="signin-input"
+                        className="input"
                         type="date"
                         value={eventDate}
                         onChange={(e) => {setEventDate(e.target.value)}}
@@ -102,19 +103,18 @@ export const MaintenanceDetail = () => {
                     <span>Наработка</span>
                     <span>{reduxState.operating_time}</span>
                     <input
-                        className="signin-input"
+                        className="input"
                         type="text"
                         placeholder="operatingTime"
                         value={operatingTime}
                         onChange={(e) => {setOperatingTime(e.target.value)}}
                     />
-                    {operatingTimeError && <div className="error-message" style={{color: 'red'}}>{operatingTimeError}</div>}
                 </div>
                 <div className="maintenance-detail-table-block">
                     <span>№ заказ-наряда</span>
                     <span>{reduxState.order_id}</span>
                     <input
-                        className="signin-input"
+                        className="input"
                         type="text"
                         placeholder="orderId"
                         value={orderId}
@@ -125,7 +125,7 @@ export const MaintenanceDetail = () => {
                     <span>Дата заказ-наряда</span>
                     <span>{reduxState.order_date}</span>
                     <input
-                        className="signin-input"
+                        className="input"
                         type="date"
                         placeholder="orderDate"
                         value={orderDate}
@@ -144,13 +144,14 @@ export const MaintenanceDetail = () => {
                 </div>
             </div>
             <button onClick={handleSubmit} className="signin-input">Сохранить</button>
+            {operatingTimeError && <div className="error-message" style={{color: 'red'}}>{operatingTimeError}</div>}
             {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
         </div>
         :
         <div className="main-maintenance-detail-cont">
             <span className="maintenance-detail-header">загрузка</span>
             <span className="maintenance-detail-hint">
-                {"(если вы перешли на эту страницу не посредством кнопки \"редактировать\" то тут ничего не появится)"}
+                {"(если вы перешли на эту страницу не посредством клинка на конкретное ТО то тут ничего не появится)"}
             </span>
         </div>
         }

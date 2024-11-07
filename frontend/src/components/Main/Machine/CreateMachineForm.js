@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Select from 'react-select'
 import { fetchMachineCreate } from "../../../reducers/machineReducer/fetchMachines";
+import './CreateMachineForm.css'
 
 export const CreateMachineForm = ({onFormSubmit}) => {
     const reduxState = useSelector(state => state.otherModels);
@@ -82,137 +83,169 @@ export const CreateMachineForm = ({onFormSubmit}) => {
     };
 
     return (
-        
-        <div className="createForm-main-cont">
-                <div>
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="machine_factory_num"
-                        value={machineFactoryNum}
-                        onChange={(e) => {setMachineFactoryNum(e.target.value)}}
-                        required
-                    />
-                    <Select 
-                        options={machine_model_details}
-                        value={selectedMachineModelDetails}
-                        onChange={(option) => setSelectedMachineModelDetails(option)}
-                        placeholder="Выберите модель машины"
-                        required
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="engine_factory_num"
-                        value={engineFactoryNum}
-                        onChange={(e) => {setEngineFactoryNum(e.target.value)}}
-                    />
-                    <Select 
-                        options={engine_model_details}
-                        value={selectedEngineModelDetails}
-                        onChange={(option) => setSelectedEngineModelDetails(option)}
-                        placeholder="Выберите модель двигателя"
-                        required
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="transmission_factory_num"
-                        value={transmissionFactoryNum}
-                        onChange={(e) => {setTransmissionFactoryNum(e.target.value)}}
-                    />
-                    <Select 
-                        options={transmission_model_details}
-                        value={selectedTransmissionModelDetails}
-                        onChange={(option) => setSelectedTransmissionModelDetails(option)}
-                        placeholder="Выберите модель трансмиссии"
-                        required
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="steering_axle_factory_num"
-                        value={steeringAxleFactoryNum}
-                        onChange={(e) => {setSteeringAxleFactoryNum(e.target.value)}}
-                    />
-                    <Select 
-                        options={steering_axle_model_details}
-                        value={selectedSteeringAxleModelDetails}
-                        onChange={(option) => setSelectedSteeringAxleModelDetails(option)}
-                        placeholder="Выберите модель управляемого моста"
-                        required
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="driving_axle_factory_num"
-                        value={drivingAxleFactoryNum}
-                        onChange={(e) => {setDrivingAxleFactoryNum(e.target.value)}}
-                    />
-                    <Select 
-                        options={driving_axle_model_details}
-                        value={selectedDrivingAxleModelDetails}
-                        onChange={(option) => setSelectedDrivingAxleModelDetails(option)}
-                        placeholder="Выберите модель ведущего моста"
-                        required
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="delivery_contract_num"
-                        value={deliveryContractNum}
-                        onChange={(e) => {setDeliveryContractNum(e.target.value)}}
-                    />
-                        <label>Дата поставки:</label>
+        <div>
+                <div className="createForm-main-cont">
+                    <div className="machine-create-table-block">    
                         <input
-                        id="dateOfShipment"
-                        className="signin-input"
-                        type="date"
-                        placeholder="date_of_shipment"
-                        value={dateOfShipment}
-                        onChange={(e) => {setDateOfShipment(e.target.value)}}
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="customer"
-                        value={customer}
-                        onChange={(e) => {setCustomer(e.target.value)}}
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="delivery_address"
-                        value={deliveryAddress}
-                        onChange={(e) => {setDeliveryAddress(e.target.value)}}
-                    />
-                    <input
-                        className="signin-input"
-                        type="text"
-                        placeholder="equipment"
-                        value={equipment}
-                        onChange={(e) => {setEquipment(e.target.value)}}
-                    />
-                    <Select 
-                        options={client_details}
-                        value={selectedClientDetails}
-                        onChange={(option) => setSelectedClientDetails(option)}
-                        placeholder="Выберите клиента"
-                        required
-                    />
-                    <Select 
-                        options={service_company_details}
-                        value={selectedServiceCompanyModelDetails}
-                        onChange={(option) => setSelectedServiceCompanyModelDetails(option)}
-                        placeholder="Выберите сервисную компанию"
-                        required
-                    />
-
-                    {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
-
-                    <button onClick={handleSubmit} className="signin-input">Сохранить</button>
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите номер машины"
+                            value={machineFactoryNum}
+                            onChange={(e) => {setMachineFactoryNum(e.target.value)}}
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={machine_model_details}
+                            value={selectedMachineModelDetails}
+                            onChange={(option) => setSelectedMachineModelDetails(option)}
+                            placeholder="Выберите модель машины"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите номер двигателя"
+                            value={engineFactoryNum}
+                            onChange={(e) => {setEngineFactoryNum(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={engine_model_details}
+                            value={selectedEngineModelDetails}
+                            onChange={(option) => setSelectedEngineModelDetails(option)}
+                            placeholder="Выберите модель двигателя"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите номер трансмиссии"
+                            value={transmissionFactoryNum}
+                            onChange={(e) => {setTransmissionFactoryNum(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={transmission_model_details}
+                            value={selectedTransmissionModelDetails}
+                            onChange={(option) => setSelectedTransmissionModelDetails(option)}
+                            placeholder="Выберите модель трансмиссии"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите номер управляемого моста"
+                            value={steeringAxleFactoryNum}
+                            onChange={(e) => {setSteeringAxleFactoryNum(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={steering_axle_model_details}
+                            value={selectedSteeringAxleModelDetails}
+                            onChange={(option) => setSelectedSteeringAxleModelDetails(option)}
+                            placeholder="Выберите модель управляемого моста"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите номер ведущего моста"
+                            value={drivingAxleFactoryNum}
+                            onChange={(e) => {setDrivingAxleFactoryNum(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={driving_axle_model_details}
+                            value={selectedDrivingAxleModelDetails}
+                            onChange={(option) => setSelectedDrivingAxleModelDetails(option)}
+                            placeholder="Выберите модель ведущего моста"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите № договора поставки"
+                            value={deliveryContractNum}
+                            onChange={(e) => {setDeliveryContractNum(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <span>Дата поставки:</span>
+                        <input
+                            id="dateOfShipment"
+                            className="create-input"
+                            type="date"
+                            value={dateOfShipment}
+                            onChange={(e) => {setDateOfShipment(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите грузополучателя"
+                            value={customer}
+                            onChange={(e) => {setCustomer(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите адрес доставки"
+                            value={deliveryAddress}
+                            onChange={(e) => {setDeliveryAddress(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <input
+                            className="create-input"
+                            type="text"
+                            placeholder="Введите комплектацию"
+                            value={equipment}
+                            onChange={(e) => {setEquipment(e.target.value)}}
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={client_details}
+                            value={selectedClientDetails}
+                            onChange={(option) => setSelectedClientDetails(option)}
+                            placeholder="Выберите клиента"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block"> 
+                        <Select 
+                            options={service_company_details}
+                            value={selectedServiceCompanyModelDetails}
+                            onChange={(option) => setSelectedServiceCompanyModelDetails(option)}
+                            placeholder="Выберите сервисную компанию"
+                            required
+                        />
+                    </div>
+                    <div className="machine-create-table-block">
+                        {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
+                        <button onClick={handleSubmit} className="signin-input">Сохранить</button>
+                    </div>
                 </div>
-                <hr />
-        </div>
+            </div>
+                
     )    
 }

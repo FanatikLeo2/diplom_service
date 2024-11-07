@@ -17,6 +17,8 @@ import {
     getServiceCompanyModel,
     getUserAll,
     getMaintenanceTypeModel,
+    getRecoveryMethodTypeModel,
+    getFailureNodeModel,
     } from "../../reducers/otherModelsReducer/fetchOtherModels"
 
 export const Main = function() {
@@ -60,6 +62,8 @@ export const Main = function() {
         dispatch(getUserAll())
         dispatch(getServiceCompanyModel())
         dispatch(getMaintenanceTypeModel())
+        dispatch(getRecoveryMethodTypeModel())
+        dispatch(getFailureNodeModel())
         console.log(localStorage.getItem('silantToken'))
     }, [dispatch])
 

@@ -1,8 +1,8 @@
 import { 
     idComplaintRetrieveAction, idMaintenanceRetrieveAction, idMachineRetrieveAction,
-    idLeadRetrieveAction, idEngineRetrieveAction, idTMTypeRetrieveAction,
-    idControlRetrieveAction, idFailureNodeRetrieveAction, idMachineModelRetrieveAction,
-    idTransmissionRetrieveAction, idRecoveryMethodRetrieveAction, idServiceCompanyRetrieveAction
+    idDrivingAxleModelRetrieveAction, idEngineModelRetrieveAction, idTMTypeRetrieveAction,
+    idSteeringAxleModelRetrieveAction, idFailureNodeRetrieveAction, idMachineModelRetrieveAction,
+    idTransmissionModelRetrieveAction, idRecoveryMethodRetrieveAction, idServiceCompanyRetrieveAction
 } from "./idRetrieveReducer";
 import $api from "../../http";
 
@@ -22,45 +22,45 @@ export const fetchMaintenanceIdRetrieve = (id) => {
     }
 }
 
-// export const fetchComplaintIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/complaints/' + id)
-//             .then(response => dispatch(idComplaintRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchComplaintIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/complaint/' + id + '/')
+            .then(response => dispatch(idComplaintRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
-// export const fetchTransmissionIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/transmission/' + id)
-//             .then(response => dispatch(idTransmissionRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchMachineModelIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/machine_model/' +  + id + '/')
+            .then(response => dispatch(idMachineModelRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
-// export const fetchMachineModelIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/machinemodel/' + id)
-//             .then(response => dispatch(idMachineModelRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchTransmissionModelIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/transmission_model/' +  + id + '/')
+            .then(response => dispatch(idTransmissionModelRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
-// export const fetchControlIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/control/' + id)
-//             .then(response => dispatch(idControlRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchSteeringAxleModelIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/steering_axle_model/' +  + id + '/')
+            .then(response => dispatch(idSteeringAxleModelRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
-// export const fetchEngineIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/engine/' + id)
-//             .then(response => dispatch(idEngineRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchEngineModelIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/engine_model/' + id + '/')
+            .then(response => dispatch(idEngineModelRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
 // export const fetchFailureNodeIdRetrieve = (id) => {
 //     return function(dispatch) {
@@ -70,13 +70,13 @@ export const fetchMaintenanceIdRetrieve = (id) => {
 //     }
 // }
 
-// export const fetchLeadIdRetrieve = (id) => {
-//     return function(dispatch) {
-//         $api.get('main/lead/' + id)
-//             .then(response => dispatch(idLeadRetrieveAction(response.data)))
-//             .catch(err => console.log(err))
-//     }
-// }
+export const fetchDrivingAxleModelIdRetrieve = (id) => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/driving_axle_model/' + id + '/')
+            .then(response => dispatch(idDrivingAxleModelRetrieveAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
 
 // export const fetchRecoveryMethodIdRetrieve = (id) => {
 //     return function(dispatch) {

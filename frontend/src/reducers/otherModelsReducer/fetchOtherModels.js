@@ -7,7 +7,9 @@ import {
     initDrivingAxlenModelsAction,
     initServiceCompanyModelsAction,
     initUserAllAction,
-    initMaintenanceTypeModelAction
+    initMaintenanceTypeModelAction,
+    initFailureNodeModelAction,
+    initRecoveryMethodModelAction,
     } from "./otherModelsReducer";
 
 export const getMachineModel = () => {
@@ -73,3 +75,20 @@ export const getMaintenanceTypeModel= () => {
             .catch(err => console.log(err))
     }
 }
+
+export const getFailureNodeModel= () => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/failure_node/')
+            .then(response => dispatch(initFailureNodeModelAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
+
+export const getRecoveryMethodTypeModel= () => {
+    return function(dispatch) {
+        $api.get('api/v1/autoservice/recovery_method/')
+            .then(response => dispatch(initRecoveryMethodModelAction(response.data)))
+            .catch(err => console.log(err))
+    }
+}
+
