@@ -1,6 +1,6 @@
 # fullstack_diplom_autoservice
 
-Дипломный проект для компании СИЛАНТ
+проект для компании СИЛАНТ
 
 1.Устанавливаем зависимости requirements.txt  в папке project, запускаем базу данных "python manage.py runserver"
 
